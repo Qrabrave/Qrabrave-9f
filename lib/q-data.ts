@@ -71,6 +71,163 @@ export const SEED_QUERY = {
   area: 'Santa Ana, CA',
 }
 
+/* ---------- Query-aware results generator ---------- */
+
+// Small deterministic string hash so the same search always yields the same list.
+function hashString(s: string) {
+  let h = 2166136261
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i)
+    h = Math.imul(h, 16777619)
+  }
+  return h >>> 0
+}
+
+function mulberry32(seed: number) {
+  let a = seed
+  return () => {
+    a |= 0
+    a = (a + 0x6d2b79f5) | 0
+    let t = Math.imul(a ^ (a >>> 15), 1 | a)
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296
+  }
+}
+
+const NAME_PREFIXES = [
+  'The',
+  'Casa',
+  'House of',
+  'Old Town',
+  'Golden',
+  'Corner',
+  'Union',
+  'Founders',
+  'Bright',
+  'Iron',
+]
+const OWNER_NAMES = [
+  "Marco's",
+  "Lena's",
+  "Sato",
+  "Delgado's",
+  "Aria",
+  "Park",
+  "Nguyen",
+  "Romano",
+  "Cohen",
+  "Okafor",
+]
+const NAME_SUFFIXES = [
+  'Co.',
+  '& Sons',
+  'Collective',
+  'Kitchen',
+  'Bar',
+  'Works',
+  'Room',
+  'Society',
+  'Studio',
+  'Market',
+]
+const AREA_DESCRIPTORS = [
+  'Downtown',
+  'Arts District',
+  'Old Town',
+  'Uptown',
+  'Riverside',
+  'Midtown',
+  'Northgate',
+  'Harbor',
+  'West End',
+  'Heights',
+]
+const ALL_TAGS: FactorTag[] = [
+  'loyalty',
+  'consistency',
+  'pure-quality',
+  'hidden-gem',
+  'value',
+]
+
+function singularize(term: string) {
+  const t = term.trim()
+  if (/ies$/i.test(t)) return t.replace(/ies$/i, 'y')
+  if (/(ses|ches|shes|xes)$/i.test(t)) return t.replace(/es$/i, '')
+  if (/s$/i.test(t) && !/ss$/i.test(t)) return t.replace(/s$/i, '')
+  return t
+}
+
+function titleCase(s: string) {
+  return s
+    .trim()
+    .split(/\s+/)
+    .map((w) => (w ? w[0].toUpperCase() + w.slice(1).toLowerCase() : w))
+    .join(' ')
+}
+
+/**
+ * Generates a deterministic, query-and-area-aware set of businesses so the
+ * dashboard reflects what the user actually searched for. There's no live
+ * backend — this simulates ranked results for any query/area combination.
+ */
+export function generateBusinesses(query: string, area: string): Business[] {
+  const cleanQuery = titleCase(query || 'Top Spots')
+  const cityName = (area || 'Your Area').split(',')[0].trim()
+  const noun = titleCase(singularize(cleanQuery))
+
+  const rand = mulberry32(hashString(`${cleanQuery}|${area}`.toLowerCase()))
+  const pick = <T,>(arr: T[]) => arr[Math.floor(rand() * arr.length)]
+  const span = (min: number, max: number) =>
+    Math.round(min + rand() * (max - min))
+
+  const usedNames = new Set<string>()
+  const businesses: Business[] = []
+  const count = 8
+
+  for (let i = 0; i < count; i++) {
+    // Build a believable, varied business name tied to the query.
+    let name = ''
+    let guard = 0
+    do {
+      const style = Math.floor(rand() * 3)
+      if (style === 0) name = `${pick(NAME_PREFIXES)} ${noun} ${pick(NAME_SUFFIXES)}`
+      else if (style === 1) name = `${pick(OWNER_NAMES)} ${noun}`
+      else name = `${noun} ${pick(NAME_SUFFIXES)}`
+      guard++
+    } while (usedNames.has(name) && guard < 12)
+    usedNames.add(name)
+
+    // Higher-ranked entries get stronger components.
+    const tier = 1 - i / count
+    const rpr = Math.min(98, span(70, 88) + Math.round(tier * 8))
+    const cr = Math.min(97, span(68, 86) + Math.round(tier * 8))
+    const q = Math.min(99, span(74, 90) + Math.round(tier * 7))
+
+    const tags: FactorTag[] = []
+    const tagCount = 1 + Math.floor(rand() * 2)
+    while (tags.length < tagCount) {
+      const t = pick(ALL_TAGS)
+      if (!tags.includes(t)) tags.push(t)
+    }
+
+    businesses.push({
+      id: `${name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '')}-${i}`,
+      name,
+      category: cleanQuery,
+      neighborhood: `${pick(AREA_DESCRIPTORS)} ${cityName}`,
+      sampleSize: span(700, 5400),
+      rpr,
+      cr,
+      q,
+      trend: Math.round((rand() * 9 - 2.5) * 10) / 10,
+      tags,
+    })
+  }
+
+  return businesses
+}
+
 export const BUSINESSES: Business[] = [
   {
     id: 'tacos-el-vado',
