@@ -40,7 +40,7 @@ export function SearchView({
         Forget reviews. <span className="text-primary">Rank what&apos;s actually good.</span>
       </h1>
       <p className="mt-4 max-w-xl text-pretty text-center leading-relaxed text-muted-foreground">
-        Qrabrave ranks restaurants and businesses by what actually keeps people
+        Qrabrave ranks businesses by what actually keeps people
         coming back, blending a proprietary formula with your own rankings to
         generate objective Q-Scores — no star ratings, no review brigading.
       </p>
