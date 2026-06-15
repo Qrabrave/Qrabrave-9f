@@ -40,8 +40,9 @@ export function SearchView({
         Forget reviews. <span className="text-primary">Rank what&apos;s actually good.</span>
       </h1>
       <p className="mt-4 max-w-xl text-pretty text-center leading-relaxed text-muted-foreground">
-        Qrabrave generates objective Q-Scores by measuring repeat purchases, cohort
-        retention, and a pure quality index — no star ratings, no review brigading.
+        Qrabrave ranks restaurants and businesses by what actually keeps people
+        coming back, using a proprietary formula to generate objective Q-Scores —
+        no star ratings, no review brigading.
       </p>
 
       <div className="mt-10 w-full rounded-2xl border border-border bg-card p-5 shadow-2xl shadow-black/30 sm:p-6">
