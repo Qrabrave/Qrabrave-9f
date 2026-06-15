@@ -40,7 +40,7 @@ export function SearchView({
         Stop guessing. <span className="text-primary">Rank what&apos;s actually good.</span>
       </h1>
       <p className="mt-4 max-w-xl text-pretty text-center leading-relaxed text-muted-foreground">
-        Qrank generates objective Q-Scores by measuring repeat purchases, cohort
+        Qrabrave generates objective Q-Scores by measuring repeat purchases, cohort
         retention, and a pure quality index — no star ratings, no review brigading.
       </p>
 

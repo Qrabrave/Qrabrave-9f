@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'Qrank — Objective Q-Score Rankings',
+  title: 'Qrabrave — Objective Q-Score Rankings',
   description:
     'AI-powered objective quality rankings for restaurants and businesses, scored on repeat purchase rate, cohort retention, and a pure quality index.',
   generator: 'v0.app',

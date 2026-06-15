@@ -22,7 +22,7 @@ export function AppHeader({
             <Activity className="h-4 w-4" strokeWidth={2.4} />
           </div>
           <span className="text-sm font-semibold tracking-tight">
-            Qrank<span className="text-muted-foreground"> / Q-Score Engine</span>
+            Qrabrave<span className="text-muted-foreground"> / Q-Score Engine</span>
           </span>
         </div>
 
