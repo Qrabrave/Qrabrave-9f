@@ -41,8 +41,8 @@ export function SearchView({
       </h1>
       <p className="mt-4 max-w-xl text-pretty text-center leading-relaxed text-muted-foreground">
         Qrabrave ranks restaurants and businesses by what actually keeps people
-        coming back, using a proprietary formula to generate objective Q-Scores —
-        no star ratings, no review brigading.
+        coming back, blending a proprietary formula with your own rankings to
+        generate objective Q-Scores — no star ratings, no review brigading.
       </p>
 
       <div className="mt-10 w-full rounded-2xl border border-border bg-card p-5 shadow-2xl shadow-black/30 sm:p-6">
