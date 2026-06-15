@@ -37,7 +37,7 @@ export function SearchView({
       </span>
 
       <h1 className="text-balance text-center text-4xl font-semibold tracking-tight sm:text-5xl">
-        Stop guessing. <span className="text-primary">Rank what&apos;s actually good.</span>
+        Forget reviews. <span className="text-primary">Rank what&apos;s actually good.</span>
       </h1>
       <p className="mt-4 max-w-xl text-pretty text-center leading-relaxed text-muted-foreground">
         Qrabrave generates objective Q-Scores by measuring repeat purchases, cohort
